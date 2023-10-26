@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
 import qs from "query-string";
-import { insertArray } from "@/lib/db-provider";
+import { insertData } from "@/lib/db-provider";
 import { Input } from "../ui/input";
 import generateRandomName from "@/utils/random-name";
 
@@ -58,21 +58,22 @@ export function SetupQuestions() {
       difficulty: data.difficulty,
       quizId: uuid,
     });
-    insertArray("quiz-created", "quizObject", {
-      isSubmitted: false,
-      uuid,
+
+    insertData(uuid, {
       name: data.quizName,
       difficulty: data.difficulty,
+      isSubmitted: false,
+      hasResult: false,
     });
 
     navigate("/question?" + params);
   }
 
   return (
-    <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+    <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full sm:w-auto p-2 sm:p-0">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <Card className="p-6">
+          <Card className="sm:p-6">
             <CardHeader>
               <CardTitle>New Quiz</CardTitle>
             </CardHeader>

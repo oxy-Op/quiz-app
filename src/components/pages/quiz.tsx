@@ -24,8 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
-import { isQuizCreated } from "@/lib/is-quiz-created";
-import { insertData, updateArray } from "@/lib/db-provider";
+import { read, update } from "@/lib/db-provider";
 
 interface QuestionProps {
   question: string;
@@ -53,31 +52,29 @@ export const Quiz = () => {
     if (!quizId || !difficulty || !name) {
       navigate("/configure-quiz");
     }
+    read(quizId).then((result) => {
+      if (result) {
+        console.log(`Quiz with ID ${quizId} is created.`);
 
-    isQuizCreated("quizObject", {
-      isSubmitted: false,
-      uuid: quizId,
-      name: name,
-      difficulty: difficulty,
-    })
-      .then((result) => {
-        if (result) {
-          console.log(`Quiz with ID ${quizId} is created.`);
+        if (result.name === name && result.difficulty === difficulty) {
           if (result.isSubmitted) {
             navigate("/results?quizId=" + quizId);
+            return;
           }
         } else {
           navigate("/configure-quiz");
+          return;
         }
-      })
-      .catch((err) => {
-        console.error("An error occurred:", err);
-      });
+      } else {
+        navigate("/configure-quiz");
+        return;
+      }
+    });
   }, []);
 
   useEffect(() => {
     fetch(
-      `https://opentdb.com/api.php?amount=1&difficulty=${difficulty}&category=31`
+      `https://opentdb.com/api.php?amount=5&difficulty=${difficulty}&category=31`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -136,22 +133,20 @@ export const Quiz = () => {
       correct_answers: correctAnswer,
       questions: data.map((item) => item.question),
     };
-    insertData(quizId, result_data);
-    updateArray("quiz-created", "quizObject", quizId, {
+    update(quizId, {
+      ...result_data,
       isSubmitted: true,
-      uuid: quizId,
-      name: name,
-      difficulty: difficulty,
+      hasResult: false,
     });
     navigate("/results?quizId=" + quizId);
   };
 
   return (
-    <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:min-w-[420px]">
+    <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] sm:w-auto w-full p-2 sm:p-0">
       {loading ? (
-        <Loader2 className="w-4 h-4 animate-spin">Loading...</Loader2>
+        <Loader2 className="mx-auto w-4 h-4 animate-spin">Loading...</Loader2>
       ) : (
-        <Card className="p-6">
+        <Card className="sm:p-6 p-2">
           <Badge
             className="w-[32px] flex items-center justify-center ms-auto"
             variant={"destructive"}
@@ -182,13 +177,13 @@ export const Quiz = () => {
                           {options.map((option, index) => (
                             <FormItem
                               key={index}
-                              className="space-y-0 flex items-center space-x-2 p-3 bg-emerald-100 dark:bg-cyan-900/60 rounded-md"
+                              className=" flex items-center bg-emerald-100 dark:bg-cyan-900/60 rounded-md h-full space-y-0 space-x-2"
                             >
-                              <FormControl>
+                              <FormControl className="ms-3">
                                 <RadioGroupItem value={option} />
                               </FormControl>
-                              <FormLabel className="w-full">
-                                <div
+                              <FormLabel className="flex items-center w-full p-3">
+                                <p
                                   dangerouslySetInnerHTML={{ __html: option }}
                                 />
                               </FormLabel>

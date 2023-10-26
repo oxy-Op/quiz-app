@@ -18,8 +18,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import { cn } from "@/lib/utils";
-import { readArrayByKey } from "@/lib/is-quiz-submitted";
-import { readData, update } from "@/lib/db-provider";
+import { read, update } from "@/lib/db-provider";
 
 interface Result {
   correct: {
@@ -66,50 +65,47 @@ export const Results = () => {
 
   useEffect(() => {
     if (!quizId || quizId === null) {
-      setError({ error_id: 404, message: "Quiz not found", quizId });
+      setError({ error_id: 404, message: "Quiz not found", quizId: "NA" });
       return;
     }
 
-    readArrayByKey("quiz-created", "quizObject", "uuid", quizId).then(
-      (result) => {
-        if (result) {
-          try {
-            if (result[0].isSubmitted === true) {
-              console.log(result);
-              readData(quizId)
-                .then((data) => {
-                  console.log(data);
-                  const result = resultGet(data.answers, data.correct_answers);
-                  setResult(result);
-                  update(quizId, {
-                    uuid: quizId,
-                    correct_count: result.correctCount,
-                    incorrect_count: result.incorrectCount,
-                  });
-                  setData({
-                    answers: data.answers,
-                    correct_answers: data.correct_answers,
-                    questions: data.questions,
-                  });
-                  setIsLoading(false);
-                })
-                .catch((err) => {
-                  setError(err);
-                  return;
-                });
-            }
-          } catch (error) {
-            setIsLoading(true);
-            console.log(`Quiz with ID ${quizId} is not submitted.`);
+    read(quizId)
+      .then((data) => {
+        if (data) {
+          console.log(`Quiz with ID ${quizId} is created.`);
+          if (!data.isSubmitted) {
             setError({
               error_id: 404,
-              message: "Quiz does not exist in database",
+              message: "Quiz not submitted",
               quizId,
             });
+            return;
           }
+
+          const result = resultGet(data.answers, data.correct_answers);
+          setResult(result);
+          setData({
+            answers: data.answers,
+            correct_answers: data.correct_answers,
+            questions: data.questions,
+          });
+
+          if (!data.hasResult) {
+            update(quizId, {
+              correct_count: result.correctCount,
+              incorrect_count: result.incorrectCount,
+              hasResult: true,
+            });
+          }
+          setIsLoading(false);
+        } else {
+          console.log(`Quiz with ID ${quizId} not found.`);
+          setError({ error_id: 404, message: "Quiz not found", quizId });
         }
-      }
-    );
+      })
+      .catch((error) => {
+        setError(error);
+      });
   }, []);
 
   return (
@@ -119,7 +115,7 @@ export const Results = () => {
           <div className="flex flex-col items-center justify-center ">
             <h3 className="text-4xl text-red-400"> Error: {error.message}</h3>
             <code className="text-xs mt-4 bg-slate-200 dark:bg-zinc-800">
-              Quiz ID: {quizId}
+              Quiz ID: {error.quizId}
             </code>
             <div className="flex flex-row justify-between items-center">
               <a
@@ -206,7 +202,7 @@ export const Results = () => {
             </div>
             <div
               className={cn(
-                "w-full flex flex-wrap flex-col justify-center items-center",
+                "w-full flex sm:flex-wrap flex-col justify-center items-center",
                 !isListViewToggled ? "sm:flex-row" : "flex-col"
               )}
             >
@@ -214,7 +210,7 @@ export const Results = () => {
                 <Card
                   key={index}
                   className={cn(
-                    "border-[#8bccaa] mt-2 me-2 h-[250px] transition-transform hover:transform hover:scale-105",
+                    "border-[#8bccaa] mt-2 me-2 h-[250px] transition-transform hover:transform hover:scale-[1.02] sm:w-auto w-full",
                     !isListViewToggled ? "sm:w-[400px] " : "sm:w-[800px]"
                   )}
                 >
@@ -236,21 +232,36 @@ export const Results = () => {
                     <div className="flex flex-col justify-center items-center">
                       {data?.answers[index] === data?.correct_answers[index] ? (
                         <div className="bg-blue-500 p-2">
-                          <p className="font-bold text-blue-200">
-                            You answered: {data?.answers[index]}
-                          </p>
+                          <div className="flex font-bold text-blue-200">
+                            <p className="me-1">You answered: </p>
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html: data?.answers[index],
+                              }}
+                            ></p>
+                          </div>
                         </div>
                       ) : (
                         <div className="bg-red-500 p-2">
-                          <p className="font-bold text-red-200">
-                            You answered: {data?.answers[index]}
-                          </p>
+                          <div className="flex font-bold text-red-200">
+                            <p className="me-1">You answered: </p>
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html: data?.answers[index],
+                              }}
+                            ></p>
+                          </div>
                         </div>
                       )}
                       <div className="bg-green-500 p-2">
-                        <p className="font-bold text-green-200">
-                          Correct answer: {data?.correct_answers[index]}
-                        </p>
+                        <div className="flex font-bold text-green-200">
+                          <p className="me-1">Correct answer: </p>
+                          <p
+                            dangerouslySetInnerHTML={{
+                              __html: data?.correct_answers[index],
+                            }}
+                          ></p>
+                        </div>
                       </div>
                     </div>
                   </CardContent>

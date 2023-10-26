@@ -64,61 +64,61 @@ async function update(key: string, newData: {}) {
   await tx.done;
 }
 
-async function insertArray(key: string, key2: string , newData: {}) {
-  const db = await initializeDatabase();
-  const tx = db.transaction('quiz', 'readwrite');
-  const store = tx.objectStore('quiz');
-  const data = await store.get(key);
+// async function insertArray(key: string, key2: string , newData: {}) {
+//   const db = await initializeDatabase();
+//   const tx = db.transaction('quiz', 'readwrite');
+//   const store = tx.objectStore('quiz');
+//   const data = await store.get(key);
 
-  if (data && typeof data === 'object') {
-    if (Array.isArray(data[key2])) {
-      data[key2].push(newData);
-    } else {
-      data[key2] = [newData];
-    }
+//   if (data && typeof data === 'object') {
+//     if (Array.isArray(data[key2])) {
+//       data[key2].push(newData);
+//     } else {
+//       data[key2] = [newData];
+//     }
 
-    await store.put(data, key);
-  } else if (!data) {
-    const newDataObject = {
-      [key2]: [newData],
-    };
+//     await store.put(data, key);
+//   } else if (!data) {
+//     const newDataObject = {
+//       [key2]: [newData],
+//     };
 
-    await store.add(newDataObject, key);
-  }
+//     await store.add(newDataObject, key);
+//   }
 
-  await tx.done;
-}
+//   await tx.done;
+// }
 
-async function updateArray(
-  key: string,
-  key2: string,
-  primaryKey: string,
-  newData: Record<string, any>
-): Promise<void> {
-  const db = await initializeDatabase();
-  const tx = db.transaction('quiz', 'readwrite');
-  const store = tx.objectStore('quiz');
-  const data = await store.get(key);
-  console.log("data: ", JSON.stringify(data));
+// async function updateArray(
+//   key: string,
+//   key2: string,
+//   primaryKey: string,
+//   newData: Record<string, any>
+// ): Promise<void> {
+//   const db = await initializeDatabase();
+//   const tx = db.transaction('quiz', 'readwrite');
+//   const store = tx.objectStore('quiz');
+//   const data = await store.get(key);
+//   console.log("data: ", JSON.stringify(data));
   
-  if (data && Array.isArray(data[key2])) {
-    const updatedData = data[key2].map((item: Record<string, any>, index: number) => {
-      console.log("item: ", JSON.stringify(item));
-      if (item.uuid === primaryKey){
-        return data[key2][index] = newData;
-      }
-    })
+//   if (data && Array.isArray(data[key2])) {
+//     const updatedData = data[key2].map((item: Record<string, any>, index: number) => {
+//       console.log("item: ", JSON.stringify(item));
+//       if (item.uuid === primaryKey){
+//         return data[key2][index] = newData;
+//       }
+//     })
     
-    console.log(updatedData);
+//     console.log(updatedData);
   
-  await store.put(data, key);
-  }
+//   await store.put(data, key);
+//   }
 
-  await tx.done;
-}
-
-
+//   await tx.done;
+// }
 
 
 
-export { insertData, readData, read, update, insertArray, updateArray };
+
+
+export { insertData, readData, read, update };
