@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { read, readData } from "@/lib/db-provider";
+import { keys, read } from "@/lib/db-provider";
 import { Loader2, Slash } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { useNavigate } from "react-router-dom";
@@ -22,21 +22,15 @@ interface ResultObject {
 }
 
 export const Home = () => {
-  const [quiz, setQuiz] = useState<Record<string, any>>([]);
   const [result, setResult] = useState<ResultObject[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    read("quiz-created").then((result) => {
-      if (result && result.quizObject) {
-        const submittedQuizzes = result.quizObject.filter(
-          (item: Record<string, any>) => item.isSubmitted === true
-        );
-        setQuiz(submittedQuizzes);
-
-        result.quizObject.map((item: Record<string, any>) => {
-          read(item.uuid).then((result) => {
+    keys().then((result) => {
+      if (result) {
+        result.map((item) => {
+          read(item).then((result) => {
             console.log(result);
             setResult((prev) => [...prev, result]);
           });
@@ -47,11 +41,6 @@ export const Home = () => {
     setIsLoading(false);
   }, []);
 
-  if (!isLoading) {
-    console.log(JSON.stringify(result, null, 2));
-    console.log(JSON.stringify(quiz, null, 2));
-  }
-
   return (
     <div className="mx-3 my-3">
       {isLoading ? (
@@ -60,10 +49,10 @@ export const Home = () => {
         </div>
       ) : (
         <div className="flex flex-wrap items-center">
-          {quiz.map((item: Record<string, any>, index: number) => (
+          {result.map((item: Record<string, any>, index: number) => (
             <Card
               onClick={() => {
-                navigate("/results?quizId=" + item.uuid);
+                navigate("/results?quizId=" + item);
               }}
               key={index}
               className="ms-2 me-2 mt-2 cursor-pointer dark:border-slate-300 border-zinc-500 transition-all hover:transform hover:scale-105 hover:shadow-lg"
