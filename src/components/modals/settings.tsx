@@ -1,12 +1,7 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -21,21 +16,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 
-import { Input } from "@/components/ui/input";
 import { useModal } from "../hooks/modal-store";
-import { useEffect } from "react";
-import { isProfile } from "@/lib/isUser";
-import { profile } from "@/lib/profile";
 import { clearDb } from "@/lib/db-provider";
 
 const Settings = () => {
