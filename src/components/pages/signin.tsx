@@ -39,7 +39,7 @@ const InitialProfile = () => {
   };
 
   return (
-    <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+    <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full md:w-auto">
       <Card className="p-6">
         <CardHeader>
           <CardTitle>What is your name?</CardTitle>
