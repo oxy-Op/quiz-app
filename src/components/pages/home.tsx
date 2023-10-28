@@ -49,7 +49,7 @@ export const Home = () => {
       ) : (
         <div className="flex flex-col items-center">
           <div className="w-full flex justify-center items-center sm:p-0 p-5">
-            <Card className="w-full sm:w-[300px] sm:h-[200px] ms-2 me-2 mt-2 cursor-pointer dark:border-slate-300 border-zinc-500 transition-all hover:transform hover:scale-105 hover:shadow-lg">
+            <Card className="w-full sm:w-[300px] sm:h-[200px] ms-2 me-2 mt-2 cursor-pointer dark:border-slate-300 border-zinc-500 transition-all ">
               <CardHeader>
                 <CardTitle>Create Quiz</CardTitle>
               </CardHeader>
