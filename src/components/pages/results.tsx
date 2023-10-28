@@ -19,6 +19,7 @@ import {
 } from "../ui/card";
 import { cn } from "@/lib/utils";
 import { read, update } from "@/lib/db-provider";
+import { isUUIDv4 } from "@/utils/isUuid";
 
 interface Result {
   correct: {
@@ -62,9 +63,10 @@ export const Results = () => {
     questions: [],
   });
   const quizId = queryParams.get("quizId") as string;
+  const redirect_from_home = queryParams.get("redirected") as string;
 
   useEffect(() => {
-    if (!quizId || quizId === null) {
+    if (!quizId || quizId === null || !isUUIDv4(quizId)) {
       setError({ error_id: 404, message: "Quiz not found", quizId: "NA" });
       return;
     }
@@ -136,12 +138,14 @@ export const Results = () => {
       )}
       {!isLoading && !error && (
         <div className="flex flex-col w-full h-screen relative">
-          <div className="ms-2 mt-2">
-            <ArrowLeft
-              onClick={() => navigate(-1)}
-              className="w-6 h-6 cursor-pointer"
-            />
-          </div>
+          {redirect_from_home === "true" && (
+            <div className="ms-2 mt-2">
+              <ArrowLeft
+                onClick={() => navigate(-1)}
+                className="w-6 h-6 cursor-pointer"
+              />
+            </div>
+          )}
           <Card className="w-[70%] mx-auto mt-2 border-[#1f201f] dark:border-[#e8e8e8]">
             <CardHeader className="text-center">
               <CardTitle>Results</CardTitle>
@@ -202,7 +206,7 @@ export const Results = () => {
             </div>
             <div
               className={cn(
-                "w-full flex sm:flex-wrap flex-col justify-center items-center",
+                "w-full p-2 flex sm:flex-wrap flex-col justify-center items-center",
                 !isListViewToggled ? "sm:flex-row" : "flex-col"
               )}
             >
@@ -228,7 +232,7 @@ export const Results = () => {
                       <div dangerouslySetInnerHTML={{ __html: item }} />
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-2 pb-1">
                     <div className="flex flex-col justify-center items-center">
                       {data?.answers[index] === data?.correct_answers[index] ? (
                         <div className="bg-blue-500 p-2">

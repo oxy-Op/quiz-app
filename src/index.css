@@ -1,11 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap");
 
 html,
 body,
 :root {
   height: 100%;
+}
+
+body {
+  font-family: "Nunito", sans-serif;
 }
 
 @layer base {

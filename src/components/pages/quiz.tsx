@@ -74,7 +74,7 @@ export const Quiz = () => {
 
   useEffect(() => {
     fetch(
-      `https://opentdb.com/api.php?amount=5&difficulty=${difficulty}&category=31`
+      `https://opentdb.com/api.php?amount=20&difficulty=${difficulty}&category=31`
     )
       .then((res) => res.json())
       .then((data) => {

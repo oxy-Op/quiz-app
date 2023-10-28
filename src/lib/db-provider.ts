@@ -11,6 +11,14 @@ async function initializeDatabase() {
   return db;
 }
 
+async function clearDb() {
+  const db = await initializeDatabase();
+  const tx = db.transaction('quiz', 'readwrite');
+  const store = tx.objectStore('quiz');
+  await store.clear();
+  await tx.done;
+}
+
 async function insertData(key: string, data: {}) {
   const db = await initializeDatabase();
   const tx = db.transaction('quiz', 'readwrite');
@@ -122,4 +130,4 @@ async function update(key: string, newData: {}) {
 
 
 
-export { insertData, read, update, keys };
+export { insertData, read, update, keys, clearDb };
