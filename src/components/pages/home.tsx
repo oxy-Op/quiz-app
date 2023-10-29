@@ -31,7 +31,10 @@ export const Home = () => {
       if (result) {
         result.map((item) => {
           read(item).then((result) => {
-            setResult((prev) => [...prev, { uuid: item, ...result }]);
+            if (result.hasResult === true) {
+              console.log(result);
+              setResult((prev) => [...prev, { uuid: item, ...result }]);
+            }
           });
         });
       }
@@ -49,7 +52,7 @@ export const Home = () => {
       ) : (
         <div className="flex flex-col items-center">
           <div className="w-full flex justify-center items-center sm:p-0 p-5">
-            <Card className="w-full sm:w-[300px] sm:h-[200px] ms-2 me-2 mt-2 cursor-pointer dark:border-slate-300 border-zinc-500 transition-all ">
+            <Card className="w-full sm:w-[300px] sm:h-[200px] ms-2 me-2 mt-2  dark:border-slate-300 border-zinc-500 transition-all ">
               <CardHeader>
                 <CardTitle>Create Quiz</CardTitle>
               </CardHeader>
@@ -57,7 +60,7 @@ export const Home = () => {
                 onClick={() => {
                   navigate("/configure-quiz");
                 }}
-                className="h-[60%]"
+                className="h-[60%] cursor-pointer"
               >
                 <div className="flex justify-center items-center border-gray-500 border border-dashed h-full">
                   <Plus />

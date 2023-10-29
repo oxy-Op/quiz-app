@@ -6,6 +6,7 @@ import {
   AlignJustify,
   ArrowLeft,
   Grid2x2,
+  Share2,
   ShieldQuestion,
   Slash,
 } from "lucide-react";
@@ -20,6 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import { read, update } from "@/lib/db-provider";
 import { isUUIDv4 } from "@/utils/isUuid";
+import { Button } from "../ui/button";
 
 interface Result {
   correct: {
@@ -175,6 +177,28 @@ export const Results = () => {
                   )}
                   %
                 </p>
+              </div>
+              <div className="flex justify-center mt-3">
+                {redirect_from_home !== "true" && (
+                  <Button
+                    variant={"outline"}
+                    onClick={() => navigate("/configure-quiz")}
+                  >
+                    Create New Quiz
+                  </Button>
+                )}
+                <div className="relative ms-2">
+                  <Button disabled variant={"outline"}>
+                    <Share2 className="w-4 h-4" />
+                    <p className="ms-2">Share Results</p>
+                  </Button>
+                  <Badge
+                    variant={"secondary"}
+                    className="absolute -top-3 right-0 rounded-none bg-blue-600 hover:bg-blue-600"
+                  >
+                    Coming soon!
+                  </Badge>
+                </div>
               </div>
             </CardContent>
             <CardFooter className="text-xs justify-center">

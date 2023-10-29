@@ -47,16 +47,22 @@ export const Quiz = () => {
   const quizId = queryParams.get("quizId") as string;
   const difficulty = queryParams.get("difficulty") as string;
   const name = queryParams.get("quizName") as string;
+  const amount = queryParams.get("amount") as string;
 
   useEffect(() => {
-    if (!quizId || !difficulty || !name) {
+    if (!quizId || !difficulty || !name || !amount) {
       navigate("/configure-quiz");
     }
+
     read(quizId).then((result) => {
       if (result) {
         console.log(`Quiz with ID ${quizId} is created.`);
 
-        if (result.name === name && result.difficulty === difficulty) {
+        if (
+          result.name === name &&
+          result.difficulty === difficulty &&
+          result.amount === amount
+        ) {
           if (result.isSubmitted) {
             navigate("/results?quizId=" + quizId);
             return;
@@ -74,7 +80,7 @@ export const Quiz = () => {
 
   useEffect(() => {
     fetch(
-      `https://opentdb.com/api.php?amount=20&difficulty=${difficulty}&category=31`
+      `https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&category=31`
     )
       .then((res) => res.json())
       .then((data) => {
