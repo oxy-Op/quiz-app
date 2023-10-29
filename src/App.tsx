@@ -13,19 +13,19 @@ export default function App() {
   return (
     <ThemeProvider defaultTheme="system">
       <ModalProvider />
-      {!isProfile() && <InitialProfile />}
-      {isProfile() && (
-        <BrowserRouter>
-          <Routes>
+      <BrowserRouter>
+        <Routes>
+          {!isProfile() && <Route index element={<InitialProfile />} />}
+          {isProfile() && (
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="/configure-quiz" element={<SetupQuestions />} />
               <Route path="/question" element={<Quiz />} />
               <Route path="/results" element={<Results />} />
             </Route>
-          </Routes>
-        </BrowserRouter>
-      )}
+          )}
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }

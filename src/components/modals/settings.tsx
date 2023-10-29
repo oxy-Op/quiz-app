@@ -19,9 +19,11 @@ import {
 
 import { useModal } from "../hooks/modal-store";
 import { clearDb } from "@/lib/db-provider";
+import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
   const { isOpen, onClose, type } = useModal();
+  // const navigate = useNavigate();
 
   const isModalOpen = isOpen && type === "settings";
   console.log(isModalOpen, type);
@@ -31,6 +33,7 @@ const Settings = () => {
     clearDb().catch((error) => {
       console.log(error);
     });
+    // navigate("/");
     window.location.reload();
   };
 
