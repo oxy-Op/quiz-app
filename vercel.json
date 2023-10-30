@@ -1,22 +1,8 @@
 {
-"version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "./server.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "destination": "/projects/anime-quiz"
-    }
-  ],
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/projects/anime-quiz",
-      "statusCode": 301
+      "source": "/projects/quiz-app/(.*)",
+      "destination": "/projects/quiz-app/$1"
     }
   ]
 }
