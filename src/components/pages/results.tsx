@@ -178,16 +178,16 @@ export const Results = () => {
                   %
                 </p>
               </div>
-              <div className="flex justify-center mt-3">
+              <div className="w-full flex flex-col items-center sm:flex-row justify-center mt-3">
                 {redirect_from_home !== "true" && (
                   <Button
                     variant={"outline"}
                     onClick={() => navigate("/configure-quiz")}
                   >
-                    Create New Quiz
+                    <p className="overflow-hidden">Create New Quiz</p>
                   </Button>
                 )}
-                <div className="relative ms-2">
+                <div className="relative sm:mt-0 sm:ms-1 mt-6 ">
                   <Button disabled variant={"outline"}>
                     <Share2 className="w-4 h-4" />
                     <p className="ms-2">Share Results</p>
