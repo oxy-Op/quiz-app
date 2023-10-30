@@ -13,7 +13,7 @@ export default function App() {
   return (
     <ThemeProvider defaultTheme="system">
       <ModalProvider />
-      <BrowserRouter>
+      <BrowserRouter basename="/projects/quiz-app">
         <Routes>
           {!isProfile() && <Route index element={<InitialProfile />} />}
           {isProfile() && (
