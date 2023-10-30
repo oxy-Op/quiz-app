@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/projects/anime-quiz",
+      "statusCode": 301
+    }
+  ]
+}
