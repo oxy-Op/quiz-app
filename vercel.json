@@ -1,1 +1,6 @@
-{}
+{
+    "rewrites": [
+    { "source": "/blog/:subdir*", "destination": "https://quiz-app-git-master-oxy-op.vercel.app//:subdir*" },
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}
