@@ -17,11 +17,20 @@ export default function App() {
         <Routes>
           {!isProfile() && <Route index element={<InitialProfile />} />}
           {isProfile() && (
-            <Route path="/" element={<Layout />}>
+            <Route path={`${process.env.PUBLIC_URL}/`} element={<Layout />}>
               <Route index element={<Home />} />
-              <Route path="/configure-quiz" element={<SetupQuestions />} />
-              <Route path="/question" element={<Quiz />} />
-              <Route path="/results" element={<Results />} />
+              <Route
+                path={`${process.env.PUBLIC_URL}/configure-quiz`}
+                element={<SetupQuestions />}
+              />
+              <Route
+                path={`${process.env.PUBLIC_URL}/question`}
+                element={<Quiz />}
+              />
+              <Route
+                path={`${process.env.PUBLIC_URL}/results`}
+                element={<Results />}
+              />
             </Route>
           )}
         </Routes>
