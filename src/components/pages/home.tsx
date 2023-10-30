@@ -32,7 +32,6 @@ export const Home = () => {
         result.map((item) => {
           read(item).then((result) => {
             if (result.hasResult === true) {
-              console.log(result);
               setResult((prev) => [...prev, { uuid: item, ...result }]);
             }
           });
